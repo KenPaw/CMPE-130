@@ -14,6 +14,8 @@
 #include "LoLSkinSaleDatabase.h"
 using namespace std;
 
+void searchSkinName(string str, vector<Skin> list);
+
 int main()
 {
 	Skin RoyalGuardFiora("Royal Guard Fiora", "Fiora", 520, 260, "10/17-10/20", 2017);
@@ -38,6 +40,7 @@ int main()
 	list.resize(1);
 	file.open("SkinSale.txt");
 
+	/* Reads in from database and adds to vector */
 	while(getline(file, str, ';'))
 	{
 		if(i == 0 && k == 1)
@@ -85,14 +88,14 @@ int main()
 	cout << "Please choose an option: " << endl;
 	int option = 0;
 	int end = 0;
-	while(end != 1)
+	while(end != 1) /* Main Menu */
 	{
 		cout << "1. Add skin sale." << endl;
-		cout << "2. Search for skin." << endl;
+		cout << "2. Search for skin based on name." << endl;
 		cout << "3. Display list of skins." << endl;
 		cout << "0. End Program." << endl;
 		cin >> option;
-		if(option == 1)
+		if(option == 1) //Adds to the data base
 		{
 			string skinName;
 			string champName;
@@ -135,30 +138,33 @@ int main()
 			}
 			file.close();
 
-			list[j].addSkinName(skinName);
+			list[j].addSkinName(skinName); //adds info to vector
 			list[j].addChampName(champName);
 			list[j].addOrigPrice(ogPrice);
 			list[j].addSalePrice(ogPrice / 2);
 			list[j].addWeek(weekDate);
 			list[j].addYear(year);
-			list[j].printInfo();
 			j++;
 			list.resize(j+1);
 		}
-		if(option == 2)
+		if(option == 2) //search function
 		{
 			string skinNameIn;
 			cout << "Please type in the name of the skin." << endl;
-			cin >> skinNameIn;
+			cin.ignore();
+			getline(cin, skinNameIn);
+			cout << skinNameIn << endl;
+			searchSkinName(skinNameIn, list);
+			end = 0;
 		}
-		if(option == 3)
+		if(option == 3) //prints list of skins
 		{
 			for(int x=0; x < j; x++)
 			{
 				list[x].printInfo();
 			}
 		}
-		if(option == 0)
+		if(option == 0) //Ends program
 		{
 			cout << "Program has ended." << endl;
 			end = 1;
@@ -168,4 +174,22 @@ int main()
 	file.close();
 
 	return 0;
+}
+
+void searchSkinName(string str, vector<Skin> list)
+{
+	int j = 0;
+	for(int i=0; i < list.size(); i++)
+	{
+		if(list[i].getSkinName() == str)
+		{
+			cout << "Skin found!" << endl;
+			list[i].printInfo();
+			j = 1;
+		}
+	}
+	if(j == 0)
+	{
+		cout << "Skin could not be found." << endl;
+	}
 }
