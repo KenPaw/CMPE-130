@@ -133,6 +133,23 @@ void Skin::printInfo()
 	cout << "Sale Price: "  << salePrice << endl;
 	cout << "Date of sale: " << month << "/" << day << "/" << year << endl;
 	cout << "Days since last sale: " << priority << endl;
+	if(priority >= 365)
+	{
+		cout << "Probability of skin sale is extremely high." << endl;
+	}
+	else if(priority > 182 && status != "Never")
+	{
+		cout << "Probability of skin sale is possible." << endl;
+	}
+	else if(priority < 365 && status == "Never")
+	{
+		cout << "Skin is fairly new has not been released for over a year yet." << endl;
+		cout << "Skin will not go on sale until a year has passed." << endl;
+	}
+	else if(priority < 182)
+	{
+		cout << "Probability of skin sale is unlikely." << endl;
+	}
 }
 
 int Skin::calculatePriority()

@@ -21,18 +21,18 @@ void quickSort(vector<Skin> &vec, int low, int high);
 
 int main()
 {
-	Skin RoyalGuardFiora("Royal Guard Fiora", "Fiora", 520, 260, 10, 17, 2017, " ");
-	Skin FrostedEzreal("Frosted Ezreal", "Ezreal", 520, 260, 6, 15, 2016, " ");
-
-	RoyalGuardFiora.printInfo();
-	FrostedEzreal.printInfo();
-
-	swap(&RoyalGuardFiora, &FrostedEzreal);
-
-	RoyalGuardFiora.printInfo();
-	FrostedEzreal.printInfo();
-//	return 0;
-//}
+//	Skin RoyalGuardFiora("Royal Guard Fiora", "Fiora", 520, 260, 10, 17, 2017, " ");
+//	Skin FrostedEzreal("Frosted Ezreal", "Ezreal", 520, 260, 6, 15, 2016, " ");
+//
+//	RoyalGuardFiora.printInfo();
+//	FrostedEzreal.printInfo();
+//
+//	swap(&RoyalGuardFiora, &FrostedEzreal);
+//
+//	RoyalGuardFiora.printInfo();
+//	FrostedEzreal.printInfo();
+////	return 0;
+////}
 
 	string skinInfo;
 	string skin;
@@ -276,7 +276,6 @@ int partition (vector<Skin> &vec, int low, int high)
 
     for (int j = low + 1; j <= high- 1; j++)
     {
-    	cout << "Priority = " << vec[j].getPriority() << endl;
         if (vec[j].getPriority() >= pivot)
         {
             i++;
