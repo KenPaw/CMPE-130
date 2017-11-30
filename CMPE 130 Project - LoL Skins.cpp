@@ -1,11 +1,3 @@
-//============================================================================
-// Name        : CMPE.cpp
-// Author      : 
-// Version     :
-// Copyright   : Your copyright notice
-// Description : Hello World in C++, Ansi-style
-//============================================================================
-
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -19,7 +11,7 @@ void searchSkinName(string str, vector<Skin> list);
 int main()
 {
 	Skin RoyalGuardFiora("Royal Guard Fiora", "Fiora", 520, 260, "10/17-10/20", 2017);
-//	RoyalGuardFiora.printInfo();
+	//	RoyalGuardFiora.printInfo();
 
 	string skinInfo;
 	string skin;
@@ -41,35 +33,35 @@ int main()
 	file.open("SkinSale.txt");
 
 	/* Reads in from database and adds to vector */
-	while(getline(file, str, ';'))
+	while (getline(file, str, ';'))
 	{
-		if(i == 0 && k == 1)
+		if (i == 0 && k == 1)
 		{
 			str.erase(0, 1);
 		}
-		if(i == 0)
+		if (i == 0)
 		{
 			skin = str;
 			k = 1;
 		}
 
-		if(i == 1)
+		if (i == 1)
 		{
 			champ = str;
 		}
-		if(i == 2)
+		if (i == 2)
 		{
 			price = stoi(str);
 		}
-		if(i == 3)
+		if (i == 3)
 		{
 			sale = stoi(str);
 		}
-		if(i == 4)
+		if (i == 4)
 		{
 			wk = str;
 		}
-		if(i == 5)
+		if (i == 5)
 		{
 			yr = stoi(str);
 			i = -1;
@@ -80,22 +72,26 @@ int main()
 			list[j].addWeek(wk);
 			list[j].addYear(yr);
 			j++;
-			list.resize(j+1);
+			list.resize(j + 1);
 		}
 		i++;
 	}
 
-	cout << "Please choose an option: " << endl;
+	
 	int option = 0;
 	int end = 0;
-	while(end != 1) /* Main Menu */
+	while (end != 1) /* Main Menu */
 	{
+		cout << "\t League of Legends Skin Searcher" << endl;
+		cout << "\t -------------------------------" << endl << endl;
+
 		cout << "1. Add skin sale." << endl;
 		cout << "2. Search for skin based on name." << endl;
 		cout << "3. Display list of skins." << endl;
 		cout << "0. End Program." << endl;
+		cout << endl << "Please choose an option: " << endl;
 		cin >> option;
-		if(option == 1) //Adds to the data base
+		if (option == 1) //Adds to the data base
 		{
 			string skinName;
 			string champName;
@@ -126,7 +122,7 @@ int main()
 
 			fstream file;
 			file.open("SkinSale.txt", fstream::app);
-			if(file.is_open())
+			if (file.is_open())
 			{
 				file << "\n" << skinName << ";" << champName << ";" << strPrice << ";" << strSale << ";" << weekDate << ";" << strYr << ";";
 				file.close();
@@ -145,26 +141,26 @@ int main()
 			list[j].addWeek(weekDate);
 			list[j].addYear(year);
 			j++;
-			list.resize(j+1);
+			list.resize(j + 1);
 		}
-		if(option == 2) //search function
+		if (option == 2) //search function
 		{
 			string skinNameIn;
 			cout << "Please type in the name of the skin." << endl;
 			cin.ignore();
 			getline(cin, skinNameIn);
-			cout << skinNameIn << endl;
 			searchSkinName(skinNameIn, list);
 			end = 0;
 		}
-		if(option == 3) //prints list of skins
+		if (option == 3) //prints list of skins
 		{
-			for(int x=0; x < j; x++)
+			for (int x = 0; x < j; x++)
 			{
 				list[x].printInfo();
+				cout << endl;
 			}
 		}
-		if(option == 0) //Ends program
+		if (option == 0) //Ends program
 		{
 			cout << "Program has ended." << endl;
 			end = 1;
@@ -173,23 +169,27 @@ int main()
 
 	file.close();
 
+	//Visual Studio
+	//system("pause");
+
 	return 0;
 }
 
 void searchSkinName(string str, vector<Skin> list)
 {
 	int j = 0;
-	for(int i=0; i < list.size(); i++)
+	for (int i = 0; i < list.size(); i++)
 	{
-		if(list[i].getSkinName() == str)
+		if (list[i].getSkinName() == str)
 		{
-			cout << "Skin found!" << endl;
+			cout << endl << "Skin found!" << endl;
 			list[i].printInfo();
 			j = 1;
+			cout << endl << endl;
 		}
 	}
-	if(j == 0)
+	if (j == 0)
 	{
-		cout << "Skin could not be found." << endl;
+		cout << endl << "Skin could not be found." << endl << endl;
 	}
 }
