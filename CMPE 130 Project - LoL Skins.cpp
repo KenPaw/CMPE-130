@@ -1,3 +1,11 @@
+//============================================================================
+// Name        : CMPE.cpp
+// Author      : 
+// Version     :
+// Copyright   : Your copyright notice
+// Description : Hello World in C++, Ansi-style
+//============================================================================
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -7,18 +15,22 @@
 using namespace std;
 
 void searchSkinName(string str, vector<Skin> list);
+void swap(Skin *a, Skin *b);
+void quickSort(vector<Skin> list);
 
 int main()
 {
-	Skin RoyalGuardFiora("Royal Guard Fiora", "Fiora", 520, 260, "10/17-10/20", 2017);
-	//	RoyalGuardFiora.printInfo();
+	Skin RoyalGuardFiora("Royal Guard Fiora", "Fiora", 520, 260, 10, 17, 2017, " ");
+//	RoyalGuardFiora.printInfo();
 
 	string skinInfo;
 	string skin;
 	string champ;
+	string stat;
 	int price;
 	int sale;
-	string wk;
+	int m;
+	int d;
 	int yr;
 
 	string str;
@@ -33,70 +45,81 @@ int main()
 	file.open("SkinSale.txt");
 
 	/* Reads in from database and adds to vector */
-	while (getline(file, str, ';'))
+	while(getline(file, str, ';'))
 	{
-		if (i == 0 && k == 1)
+		if(i == 0 && k == 1)
 		{
 			str.erase(0, 1);
 		}
-		if (i == 0)
+		if(i == 0)
 		{
 			skin = str;
 			k = 1;
 		}
 
-		if (i == 1)
+		if(i == 1)
 		{
 			champ = str;
 		}
-		if (i == 2)
+		if(i == 2)
 		{
 			price = stoi(str);
 		}
-		if (i == 3)
+		if(i == 3)
 		{
 			sale = stoi(str);
 		}
-		if (i == 4)
+		if(i == 4)
 		{
-			wk = str;
+			m = stoi(str);
 		}
-		if (i == 5)
+		if(i == 5)
+		{
+			d = stoi(str);
+		}
+		if(i == 6)
 		{
 			yr = stoi(str);
+		}
+		if(i == 7)
+		{
+			stat = str;
 			i = -1;
 			list[j].addSkinName(skin);
 			list[j].addChampName(champ);
 			list[j].addOrigPrice(price);
 			list[j].addSalePrice(sale);
-			list[j].addWeek(wk);
+			list[j].addMonth(m);
+			list[j].addDay(d);
 			list[j].addYear(yr);
+			list[j].addStatus(str);
 			j++;
-			list.resize(j + 1);
+			list.resize(j+1);
 		}
 		i++;
 	}
 
-	
 	int option = 0;
 	int end = 0;
-	while (end != 1) /* Main Menu */
+	while(end != 1) /* Main Menu */
 	{
 		cout << "\t League of Legends Skin Searcher" << endl;
 		cout << "\t -------------------------------" << endl << endl;
-
 		cout << "1. Add skin sale." << endl;
 		cout << "2. Search for skin based on name." << endl;
 		cout << "3. Display list of skins." << endl;
+		cout << "4. Add priority" << endl;
 		cout << "0. End Program." << endl;
 		cout << endl << "Please choose an option: " << endl;
 		cin >> option;
-		if (option == 1) //Adds to the data base
+		if(option == 1) //Adds to the data base
 		{
 			string skinName;
 			string champName;
-			string weekDate;
+			string strStat;
 			int ogPrice;
+			int month;
+			int day;
 			int year;
 
 			cout << "Please type in the name of the skin." << endl;
@@ -111,20 +134,25 @@ int main()
 			string strPrice = to_string(ogPrice);
 			string strSale = to_string(ogPrice / 2);
 
-			cout << "Please type in the duration of the sale. (ex. 10/17-10/20)" << endl;
-			cin.ignore();
-			getline(cin, weekDate);
-
-
-			cout << "Please type in the year." << endl;
+			cout << "Please type in the date of the sale (example 11 20 2017)." << endl;
+			cin >> month;
+			cin >> day;
 			cin >> year;
+
+			string strM = to_string(month);
+			string strD = to_string(day);
 			string strYr = to_string(year);
+
+			cout << "Please type in the status of the skin (type a space unless skin has never been on sale or is Legacy)." << endl;
+			cin.ignore();
+			getline(cin, strStat);
 
 			fstream file;
 			file.open("SkinSale.txt", fstream::app);
-			if (file.is_open())
+			if(file.is_open())
 			{
-				file << "\n" << skinName << ";" << champName << ";" << strPrice << ";" << strSale << ";" << weekDate << ";" << strYr << ";";
+				file << "\n" << skinName << ";" << champName << ";" << strPrice << ";" << strSale << ";" << strM << ";" << strD
+						<< ";" << strYr << ";" << strStat << ";";
 				file.close();
 			}
 			else
@@ -138,29 +166,40 @@ int main()
 			list[j].addChampName(champName);
 			list[j].addOrigPrice(ogPrice);
 			list[j].addSalePrice(ogPrice / 2);
-			list[j].addWeek(weekDate);
+			list[j].addMonth(month);
+			list[j].addDay(day);
 			list[j].addYear(year);
+			list[j].addStatus(strStat);
 			j++;
-			list.resize(j + 1);
+			list.resize(j+1);
 		}
-		if (option == 2) //search function
+		if(option == 2) //search function
 		{
 			string skinNameIn;
 			cout << "Please type in the name of the skin." << endl;
 			cin.ignore();
 			getline(cin, skinNameIn);
+			cout << skinNameIn << endl;
 			searchSkinName(skinNameIn, list);
 			end = 0;
 		}
-		if (option == 3) //prints list of skins
+		if(option == 3) //prints list of skins
 		{
-			for (int x = 0; x < j; x++)
+			for(int x=0; x < j; x++)
 			{
 				list[x].printInfo();
 				cout << endl;
 			}
 		}
-		if (option == 0) //Ends program
+		if (option == 4)
+		{
+			for(int a = 0; a < list.size(); a++)
+			{
+				int p = list[a].calculatePriority();
+				list[a].changePriority(p);
+			}
+		}
+		if(option == 0) //Ends program
 		{
 			cout << "Program has ended." << endl;
 			end = 1;
@@ -169,27 +208,56 @@ int main()
 
 	file.close();
 
-	//Visual Studio
-	//system("pause");
-
 	return 0;
 }
 
 void searchSkinName(string str, vector<Skin> list)
 {
 	int j = 0;
-	for (int i = 0; i < list.size(); i++)
+	for(int i=0; i < list.size(); i++)
 	{
-		if (list[i].getSkinName() == str)
+		if(list[i].getSkinName() == str)
 		{
 			cout << endl << "Skin found!" << endl;
 			list[i].printInfo();
 			j = 1;
-			cout << endl << endl;
+			cout << endl;
 		}
 	}
-	if (j == 0)
+	if(j == 0)
 	{
 		cout << endl << "Skin could not be found." << endl << endl;
 	}
 }
+
+void swap(Skin *a, Skin *b)
+{
+     Skin t = *a;
+    *a = *b;
+    *b = t;
+}
+
+/* This function takes last element as pivot, places
+   the pivot element at its correct position in sorted
+    array, and places all smaller (smaller than pivot)
+   to left of pivot and all greater elements to right
+   of pivot */
+//int partition (vector<Skin> vec)
+//{
+//	int high = vec.size() - 1;
+//    int pivot = ;    // pivot
+//    int i = (low - 1);  // Index of smaller element
+//
+//    for (int j = low; j <= high- 1; j++)
+//    {
+//        // If current element is smaller than or
+//        // equal to pivot
+//        if (arr[j] <= pivot)
+//        {
+//            i++;    // increment index of smaller element
+//            swap(&arr[i], &arr[j]);
+//        }
+//    }
+//    swap(&arr[i + 1], &arr[high]);
+//    return (i + 1);
+//}
