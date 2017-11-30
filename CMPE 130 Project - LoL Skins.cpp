@@ -16,12 +16,23 @@ using namespace std;
 
 void searchSkinName(string str, vector<Skin> list);
 void swap(Skin *a, Skin *b);
-void quickSort(vector<Skin> list);
+int partition (vector<Skin> &vec, int low, int high);
+void quickSort(vector<Skin> &vec, int low, int high);
 
 int main()
 {
 	Skin RoyalGuardFiora("Royal Guard Fiora", "Fiora", 520, 260, 10, 17, 2017, " ");
-//	RoyalGuardFiora.printInfo();
+	Skin FrostedEzreal("Frosted Ezreal", "Ezreal", 520, 260, 6, 15, 2016, " ");
+
+	RoyalGuardFiora.printInfo();
+	FrostedEzreal.printInfo();
+
+	swap(&RoyalGuardFiora, &FrostedEzreal);
+
+	RoyalGuardFiora.printInfo();
+	FrostedEzreal.printInfo();
+//	return 0;
+//}
 
 	string skinInfo;
 	string skin;
@@ -93,6 +104,8 @@ int main()
 			list[j].addDay(d);
 			list[j].addYear(yr);
 			list[j].addStatus(str);
+			int p = list[j].calculatePriority();
+			list[j].changePriority(p);
 			j++;
 			list.resize(j+1);
 		}
@@ -108,7 +121,8 @@ int main()
 		cout << "1. Add skin sale." << endl;
 		cout << "2. Search for skin based on name." << endl;
 		cout << "3. Display list of skins." << endl;
-		cout << "4. Add priority" << endl;
+		cout << "4. Create Priority Queue" << endl;
+		cout << "5. Swap two indexes." << endl;
 		cout << "0. End Program." << endl;
 		cout << endl << "Please choose an option: " << endl;
 		cin >> option;
@@ -193,11 +207,28 @@ int main()
 		}
 		if (option == 4)
 		{
-			for(int a = 0; a < list.size(); a++)
+			int n = list.size() - 1;
+			quickSort(list, 0, n);
+			cout << "Priority queue: " << endl;
+			cout << endl;
+			for(int x=0; x < j; x++)
 			{
-				int p = list[a].calculatePriority();
-				list[a].changePriority(p);
+				list[x].printInfo();
+				cout << endl;
 			}
+		}
+		if (option == 5)
+		{
+			cout << "Please input 2 indexes." << endl;
+			int a, b;
+			cin >> a;
+			cin >> b;
+			list[a].printInfo();
+			list[b].printInfo();
+			cout << endl;
+			swap(&list[a], &list[b]);
+			list[a].printInfo();
+			list[b].printInfo();
 		}
 		if(option == 0) //Ends program
 		{
@@ -237,27 +268,33 @@ void swap(Skin *a, Skin *b)
     *b = t;
 }
 
-/* This function takes last element as pivot, places
-   the pivot element at its correct position in sorted
-    array, and places all smaller (smaller than pivot)
-   to left of pivot and all greater elements to right
-   of pivot */
-//int partition (vector<Skin> vec)
-//{
-//	int high = vec.size() - 1;
-//    int pivot = ;    // pivot
-//    int i = (low - 1);  // Index of smaller element
-//
-//    for (int j = low; j <= high- 1; j++)
-//    {
-//        // If current element is smaller than or
-//        // equal to pivot
-//        if (arr[j] <= pivot)
-//        {
-//            i++;    // increment index of smaller element
-//            swap(&arr[i], &arr[j]);
-//        }
-//    }
-//    swap(&arr[i + 1], &arr[high]);
-//    return (i + 1);
-//}
+int partition (vector<Skin> &vec, int low, int high)
+{
+    int pivot = vec[low].getPriority();
+    int i = low;
+    int j;
+
+    for (int j = low + 1; j <= high- 1; j++)
+    {
+    	cout << "Priority = " << vec[j].getPriority() << endl;
+        if (vec[j].getPriority() >= pivot)
+        {
+            i++;
+            swap(&vec[i], &vec[j]);
+        }
+    }
+    swap(&vec[i], &vec[low]);
+    return i;
+}
+
+void quickSort(vector<Skin> &vec, int low, int high)
+{
+	int pi;
+    if (low < high)
+    {
+        pi = partition(vec, low, high);
+
+        quickSort(vec, low, pi);
+        quickSort(vec, pi + 1, high);
+    }
+}
