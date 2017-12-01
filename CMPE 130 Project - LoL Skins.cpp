@@ -18,6 +18,7 @@ void searchSkinName(string str, vector<Skin> list);
 void swap(Skin *a, Skin *b);
 int partition (vector<Skin> &vec, int low, int high);
 void quickSort(vector<Skin> &vec, int low, int high);
+void popFront(vector<Skin> vec);
 
 int main()
 {
@@ -48,10 +49,16 @@ int main()
 
 	ifstream file;
 
+
+
 	int i = 0;
 	int j = 0;
 	int k = 0;
 	vector<Skin> list;
+	if(list.empty() == true)
+	{
+		cout << "Vector is empty" << endl;
+	}
 	list.resize(1);
 	file.open("SkinSale.txt");
 
@@ -122,7 +129,7 @@ int main()
 		cout << "2. Search for skin based on name." << endl;
 		cout << "3. Display list of skins." << endl;
 		cout << "4. Create Priority Queue" << endl;
-		cout << "5. Swap two indexes." << endl;
+		cout << "5. Pop Priority Queue." << endl;
 		cout << "0. End Program." << endl;
 		cout << endl << "Please choose an option: " << endl;
 		cin >> option;
@@ -219,16 +226,8 @@ int main()
 		}
 		if (option == 5)
 		{
-			cout << "Please input 2 indexes." << endl;
-			int a, b;
-			cin >> a;
-			cin >> b;
-			list[a].printInfo();
-			list[b].printInfo();
-			cout << endl;
-			swap(&list[a], &list[b]);
-			list[a].printInfo();
-			list[b].printInfo();
+			list.erase(list.begin());
+			cout << "Popped front of queue." << endl;
 		}
 		if(option == 0) //Ends program
 		{
